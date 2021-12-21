@@ -51,16 +51,42 @@ async function joinGame(options = defaultOptions) {
     const launchUrl = buildLaunchUrl("roblox-player", {
         launchmode: "play",
         gameinfo: authTicket,
-        placelauncherurl: encodeURIComponent(placeLauncherURL.href),
+        placelauncherurl: placeLauncherURL.href,
     })
-
+    
     const player = await robloxPlayer.locate(true)
+    
+    return spawn(player.application, [
+        '--play',
+        '-a',
+        'https://auth.roblox.com/v1/authentication-ticket/redeem',
+        '-t',
+        authTicket,
+        '-j',
+        encodeURI(placeLauncherURL.href),
+        '-b',
+        `${Date.now()}`,
+        `--launchtime=${Date.now()}`,
+        '--rloc',
+        'en_us',
+        '--gloc',
+        'en_us'
+    ], {
+        windowsVerbatimArguments: true,
+        detached: true,
+        stdio: ["ignore", "ignore", "ignore"],
+        cwd: path.parse(player.application).dir,
+    })
     const childProcess = spawn(player.launcher, [ launchUrl ], {
         windowsVerbatimArguments: true,
         detached: true,
         stdio: ["ignore", "ignore", "ignore"],
         cwd: path.parse(player.launcher).dir,
     })
+    return childProcess;
+    
+    
+    
 
     return childProcess
 }
