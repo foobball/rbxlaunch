@@ -25,7 +25,7 @@
   "homepage": "https://github.com/foobball/rbxlaunch#readme",
   "dependencies": {
     "got": "^11.8.1",
-    "rbxapp": "0.0.1"
+    "rbxapp": "github:foobball/rbxapp"
   },
   "devDependencies": {
     "dotenv": "^8.2.0"
